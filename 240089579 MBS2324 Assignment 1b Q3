@@ -1,0 +1,25 @@
+import cv2
+import numpy as np
+
+cam = cv2.VideoCapture(0)
+
+while True:
+    ret, frame = cam.read()
+    if not ret:
+        break
+
+    height, width = frame.shape[:2]
+    mirror_frame = cv2.flip(frame, 1)
+    upside_down_frame = cv2.flip(frame, 0)
+    upside_down_mirror_frame = cv2.flip(upside_down_frame, 1)
+    combined_frame = np.hstack((frame, mirror_frame))
+    combined_frame_upside_down = np.hstack((upside_down_frame, upside_down_mirror_frame))
+    combined_frame = np.vstack((combined_frame, combined_frame_upside_down))
+    combined_frame_resized = cv2.resize(combined_frame, (width * 1 // 1, height // 1))
+
+    cv2.imshow("Webcam Q3", combined_frame_resized)
+    if cv2.waitKey(1) & 0xff == ord('q'):
+        break
+
+cam.release()
+cv2.destroyAllWindows()
