@@ -1,0 +1,25 @@
+import cv2
+import numpy as np
+
+cam = cv2.VideoCapture(0)
+
+while True:
+    ret, frame = cam.read()
+    width = cam.get(3)
+    height = cam.get(4)
+    print(height,width)
+    frameResize = cv2.resize(frame, (int(width*2),int(height/2)))
+    frameGray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    frameHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    frameBlur = cv2.GaussianBlur(frameGray,(5,5),0)
+    frameCanny = cv2.Canny(frame, 100, 300)
+    cv2.imshow("Webcam 1", frame)
+    cv2.imshow("Webcam 2", frameHSV)
+    cv2.imshow("Webcam 3", frameBlur)
+    cv2.imshow("Webcam 4", frameCanny)
+
+    if cv2.waitKey(1) == ord('q'):
+        break
+
+cam.release()
+cv2.destroyAllWindows()
